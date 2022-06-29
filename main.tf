@@ -17,9 +17,7 @@ terraform {
   }
 }
 
-provider "pagerduty" {
-  token = env.PAGERDUTY_TOKEN
-}
+provider "pagerduty" {}
 
 resource "pagerduty_team" "engineering" {
   name        = "Engineering"
