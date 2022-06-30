@@ -1,19 +1,19 @@
-name: "Terraform"
+name: Terraform
 
 on:
   workflow_dispatch:
   pull_request:
   push:
     branches:
-      - "main"
+      - main
 
 permissions:
   contents: read
 
 jobs:
   terraform:
-    name: "Terraform"
-    runs-on: ubuntu-22.04
+    name: Terraform
+    runs-on: ubuntu-latest
     environment: prod
 
     defaults:
@@ -53,12 +53,6 @@ jobs:
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
-        # On push to "main", build or change infrastructure according to Terraform configuration files
-        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
-
       # Outputs can be used in subsequent steps to comment on the pull request
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -88,7 +82,7 @@ jobs:
 
             </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -96,3 +90,12 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      # On push to "main", build or change infrastructure according to Terraform configuration files
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
