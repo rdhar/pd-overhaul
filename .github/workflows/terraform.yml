@@ -88,7 +88,7 @@ jobs:
 
             </details>
 
-            *Pushed by: ${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *\`${{ github.workflow }}\` workflow via \`${{ github.event_name }}\` by \`${{ github.actor }}\`.*`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,

@@ -19,8 +19,14 @@ terraform {
 
 provider "pagerduty" {}
 
+resource "pagerduty_team" "team--engineering" {
+  name        = "Engineering"
+  description = "All engineering"
+}
+
 resource "pagerduty_business_service" "example" {
-  name             = "My Web App"
+  name             = "Engineering"
   description      = "A very descriptive description of this business service"
   point_of_contact = "PagerDuty Admin"
+  team             = resource.pagerduty_team.team--engineering.id
 }
