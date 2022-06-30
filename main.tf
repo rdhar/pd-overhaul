@@ -19,7 +19,7 @@ terraform {
 
 provider "pagerduty" {}
 
-# resource "pagerduty_team" "engineering" {
-#   name        = "Engineering"
-#   description = "All engineering"
-# }
+resource "pagerduty_team" "engineering" {
+  name        = "Engineering"
+  description = "All engineering"
+}
