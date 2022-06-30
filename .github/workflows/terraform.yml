@@ -15,8 +15,8 @@ permissions:
 jobs:
   terraform:
     name: Terraform
-    runs-on: ubuntu-latest
-    environment: prod
+    runs-on: ubuntu-22.04
+    environment: dev
 
     defaults:
       run:
